@@ -1,19 +1,20 @@
 Name:           dblatex
-Version:        0.3.10
-Release:        8
+Version:        0.3.11
+Release:        1
 Summary:        DocBook to LaTeX/ConTeXt Publishing
 BuildArch:      noarch
 License:        GPLv2+ and GPLv2 and LPPL and DMIT and Public Domain
 URL:            http://dblatex.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}py3.tar.bz2
 Source1:        COPYING-docbook-xsl
-Patch0000:      dblatex-0.2.7-external-which.patch
-Patch0001:      dblatex-disable-debian.patch
+Patch0000:      dblatex-0.3.11-disable-debian.patch
+Patch0001:      dblatex-0.3.11-which-shutil.patch
 
-BuildRequires:  python2-devel python2-which libxslt texlive-base texlive-collection-latex texlive-collection-xetex
+BuildRequires:  python3-devel python3-setuptools  libxslt texlive-base texlive-collection-latex texlive-collection-xetex
 BuildRequires:  texlive-collection-htmlxml texlive-xmltex-bin texlive-anysize texlive-appendix texlive-changebar
 BuildRequires:  texlive-fancybox texlive-jknapltx texlive-multirow  texlive-overpic texlive-pdfpages texlive-subfigure
 BuildRequires:  texlive-stmaryrd texlive-wasysym
+Buildrequires:	/usr/bin/pathfix.py
 
 Requires:       texlive-base texlive-collection-latex texlive-collection-xetex texlive-collection-htmlxml
 Requires:       texlive-passivetex texlive-xmltex texlive-xmltex-bin texlive-anysize texlive-appendix texlive-bibtopic
@@ -35,15 +36,15 @@ Summary:   Introduce how to use dblatex
 Introduce how to use dblatex
 
 %prep
-%autosetup -n %{name}-%{version} -p1
+%autosetup -n %{name}-%{version}py3 -p1
 rm -rf lib/contrib
 
 %build
-%{__python2} setup.py build
+%{__python3} setup.py build
 
 
 %install
-%{__python2} setup.py install --root $RPM_BUILD_ROOT
+%{__python3} setup.py install --root $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_datadir}/texlive/texmf-dist/tex/latex/dblatex
 for file in ` find $RPM_BUILD_ROOT%{_datadir}/dblatex/latex/ -name '*.sty' ` ; do
@@ -66,8 +67,8 @@ cp -p %{SOURCE1} COPYING-docbook-xsl
 
 %files
 %doc COPYRIGHT COPYING-docbook-xsl
-%{python2_sitelib}/dbtexmf/
-%{python2_sitelib}/dblatex-*.egg-info
+%{python3_sitelib}/dbtexmf/
+%{python3_sitelib}/dblatex-*.egg-info
 %{_bindir}/dblatex
 %{_datadir}/dblatex/
 %{_datadir}/texlive/texmf-dist/tex/latex/dblatex/
@@ -85,5 +86,8 @@ cp -p %{SOURCE1} COPYING-docbook-xsl
 %{_mandir}/man1/dblatex.1*
 
 %changelog
+* Fri Nov 13 2020 liuweibo<liuweibo10@huawei.com> - 0.3.11-1
+- Update to 0.3.11
+
 * Fri Nov 22 2019 yangjian<yangjian79@huawei.com> - 0.3.10-8
 - Package init
